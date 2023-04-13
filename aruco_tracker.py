@@ -12,6 +12,7 @@ import numpy as np
 import cv2
 import cv2.aruco as aruco
 import glob
+import math
 
 cap = cv2.VideoCapture(0)
 
@@ -89,13 +90,17 @@ while (True):
 
         for i in range(0, ids.size):
             # draw axis for the aruco markers
-            cv2.drawFrameAxes(frame, mtx, dist, rvec[i], tvec[i], 0.1)
-
+            cv2.drawFrameAxes(frame, mtx, dist, rvec[i], tvec[i], 0.05)
         # draw a square around the markers
         aruco.drawDetectedMarkers(frame, corners)
 
-
+        avgx = int((corners[0][0][0][0]+corners[0][0][1][0]+corners[0][0][2][0]+corners[0][0][3][0])/4)  #use central cordinates from aruco
+        avgy = int((corners[0][0][0][1] + corners[0][0][1][1] + corners[0][0][2][1] + corners[0][0][3][1]) / 4) #use central cordinates from aruco
+        #print(avgx,",",avgy)
+        #print(tvec[0][0][0]*1000,",",tvec[0][0][1]*1000,",",tvec[0][0][2]*1000)
+        print(math.degrees(rvec[0][0][0]),",",math.degrees(rvec[0][0][1]),",",math.degrees(rvec[0][0][2]))
         # code to show ids of the marker found
+        #cv2.putText(frame, "pos: " + str(rvec[0][0][0])+str(rvec[0][0][1])+str(rvec[0][0][2]), (avgx,avgy), font, 1, (0,255,0),2,cv2.LINE_AA)
         strg = ''
         for i in range(0, ids.size):
             strg += str(ids[i][0])+', '
